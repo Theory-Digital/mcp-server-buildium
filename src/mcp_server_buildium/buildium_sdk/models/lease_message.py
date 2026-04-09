@@ -84,14 +84,22 @@ class LeaseMessage(BaseModel):
             raise ValueError("must be one of enum values ('MonthToMonth', 'Standard', 'Owner')")
         return value
 
+    @field_validator('renewal_offer_status', mode='before')
+    def renewal_offer_status_coerce_int(cls, value):
+        """Coerce integer enum codes from the API to strings before validation"""
+        if isinstance(value, int):
+            return str(value)
+        return value
+
     @field_validator('renewal_offer_status')
     def renewal_offer_status_validate_enum(cls, value):
         """Validates the enum"""
         if value is None:
             return value
 
-        if value not in set(['NotSet', 'NotStarted', 'Generated', 'Declined', 'Renewed', 'Draft', 'Unsigned', 'PartiallySigned', 'Countersign', 'Activated', 'Sent', 'Accepted']):
-            raise ValueError("must be one of enum values ('NotSet', 'NotStarted', 'Generated', 'Declined', 'Renewed', 'Draft', 'Unsigned', 'PartiallySigned', 'Countersign', 'Activated', 'Sent', 'Accepted')")
+        known_values = set(['NotSet', 'NotStarted', 'Generated', 'Declined', 'Renewed', 'Draft', 'Unsigned', 'PartiallySigned', 'Countersign', 'Activated', 'Sent', 'Accepted'])
+        if value not in known_values and not value.isdigit():
+            raise ValueError("must be one of enum values ('NotSet', 'NotStarted', 'Generated', 'Declined', 'Renewed', 'Draft', 'Unsigned', 'PartiallySigned', 'Countersign', 'Activated', 'Sent', 'Accepted') or an integer enum code")
         return value
 
     model_config = ConfigDict(
@@ -236,7 +244,7 @@ class LeaseMessage(BaseModel):
             "LeaseStatus": obj.get("LeaseStatus"),
             "IsEvictionPending": obj.get("IsEvictionPending"),
             "TermType": obj.get("TermType"),
-            "RenewalOfferStatus": obj.get("RenewalOfferStatus"),
+            "RenewalOfferStatus": str(obj.get("RenewalOfferStatus")) if obj.get("RenewalOfferStatus") is not None else None,
             "CurrentTenants": [TenantMessage.from_dict(_item) for _item in obj["CurrentTenants"]] if obj.get("CurrentTenants") is not None else None,
             "CurrentNumberOfOccupants": obj.get("CurrentNumberOfOccupants"),
             "AccountDetails": LeaseAccountDetailMessage.from_dict(obj["AccountDetails"]) if obj.get("AccountDetails") is not None else None,
