@@ -23,8 +23,8 @@ def register_bill_tools(mcp: FastMCP, client: BuildiumClient) -> None:
         offset: int = 0,
     ) -> dict[str, Any]:
         """List bills from Buildium."""
-        result = await client.bills_api.external_api_bills_get_bills(
-            vendorid=vendor_id, status=status, limit=limit, offset=offset
+        result = await client.bills_api.external_api_bills_get_bills_async(
+            vendorid=vendor_id, paidstatus=status, limit=limit, offset=offset
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()
