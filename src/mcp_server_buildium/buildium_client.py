@@ -10,9 +10,11 @@ from .sdk_imports import (  # noqa: E402
     AssociationUnitsApi,
     BankAccountsApi,
     BillsApi,
+    BoardMembersApi,
     Configuration,
     FilesApi,
     LeasesApi,
+    OwnershipAccountsApi,
     RentalOwnersApi,
     RentalPropertiesApi,
     RentalTenantsApi,
@@ -54,6 +56,8 @@ class BuildiumClient:
         self.bills_api = BillsApi(self._api_client)
         self.files_api = FilesApi(self._api_client)
         self.bank_accounts_api = BankAccountsApi(self._api_client)
+        self.board_members_api = BoardMembersApi(self._api_client)
+        self.ownership_accounts_api = OwnershipAccountsApi(self._api_client)
 
     def _initialize_sdk(self) -> None:
         """Initialize the SDK configuration and API client with API key headers."""
@@ -89,4 +93,19 @@ class BuildiumClient:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
-        self.close()
+        import asyncio
+
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            asyncio.run(self.close())
+        else:
+            raise RuntimeError("Use 'async with BuildiumClient(...)' inside async code.")
+
+    async def __aenter__(self):
+        """Async context manager entry."""
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        await self.close()

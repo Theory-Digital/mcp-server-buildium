@@ -64,16 +64,16 @@ def register_file_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def create_file_upload_request(upload_request: dict[str, Any]) -> dict[str, Any]:
         """Create a file upload request to get an upload URL."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.file_upload_request_post_message import (
-                FileUploadRequestPostMessage,
+            from mcp_server_buildium.buildium_sdk.models.file_upload_post_message import (
+                FileUploadPostMessage,
             )
 
-            upload_message = FileUploadRequestPostMessage(**upload_request)
+            upload_message = FileUploadPostMessage(**upload_request)
         except ImportError:
             upload_message = upload_request
 
-        result = await client.files_api.external_api_file_uploads_create_file_upload_request_async(
-            file_upload_request_post_message=upload_message
+        result = await client.files_api.external_api_files_uploads_create_upload_file_request_async(
+            file_upload_post_message=upload_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()

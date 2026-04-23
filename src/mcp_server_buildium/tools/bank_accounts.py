@@ -18,7 +18,7 @@ def register_bank_account_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     @mcp.tool()
     async def list_bank_accounts(limit: int = 100, offset: int = 0) -> dict[str, Any]:
         """List bank accounts from Buildium."""
-        result = await client.bank_accounts_api.external_api_bank_accounts_get_bank_accounts(
+        result = await client.bank_accounts_api.external_api_bank_accounts_get_all_bank_accounts(
             limit=limit, offset=offset
         )
         if hasattr(result, "to_dict"):
@@ -30,7 +30,7 @@ def register_bank_account_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     @mcp.tool()
     async def get_bank_account(bank_account_id: int) -> dict[str, Any]:
         """Get a specific bank account by ID."""
-        result = await client.bank_accounts_api.external_api_bank_accounts_get_bank_account_by_id(
+        result = await client.bank_accounts_api.external_api_bank_accounts_get_bank_account(
             bank_account_id=bank_account_id
         )
         if hasattr(result, "to_dict"):

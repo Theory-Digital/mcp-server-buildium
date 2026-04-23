@@ -74,6 +74,7 @@ class RESTClientObject:
     async def close(self):
         if self.pool_manager is not None:
             await self.pool_manager.aclose()
+            self.pool_manager = None
 
     async def request(
             self,
@@ -170,10 +171,17 @@ class RESTClientObject:
                          declared content type."""
                 raise ApiException(status=0, reason=msg)
 
-        if self.pool_manager is None:
+        if self.pool_manager is None or self.pool_manager.is_closed:
             self.pool_manager = self._create_pool_manager()
 
-        r = await self.pool_manager.request(**args)
+        try:
+            r = await self.pool_manager.request(**args)
+        except httpx.TransportError:
+            await self.close()
+            if method not in {"GET", "HEAD", "OPTIONS"}:
+                raise
+            self.pool_manager = self._create_pool_manager()
+            r = await self.pool_manager.request(**args)
         return RESTResponse(r)
 
     def _create_pool_manager(self) -> httpx.AsyncClient:

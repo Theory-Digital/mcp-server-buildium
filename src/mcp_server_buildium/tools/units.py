@@ -29,9 +29,11 @@ def register_unit_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             "offset": offset,
         }
         if property_id is not None:
-            kwargs["propertyid"] = property_id
+            kwargs["propertyids"] = [property_id]
 
-        result = await client.rental_units_api.external_api_rental_units_get_rental_units(**kwargs)
+        result = await client.rental_units_api.external_api_rental_units_get_all_rental_units(
+            **kwargs
+        )
         if hasattr(result, "to_dict"):
             return result.to_dict()
         return result if isinstance(result, dict) else {"units": result, "count": len(result)}
@@ -87,7 +89,7 @@ def register_unit_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     # Association Units
     @mcp.tool()
     async def list_association_units(
-        property_id: int | None = None,
+        association_id: int | None = None,
         limit: int = 100,
         offset: int = 0,
     ) -> dict[str, Any]:
@@ -97,11 +99,11 @@ def register_unit_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             "limit": limit,
             "offset": offset,
         }
-        if property_id is not None:
-            kwargs["propertyid"] = property_id
+        if association_id is not None:
+            kwargs["associationids"] = [association_id]
 
         result = (
-            await client.association_units_api.external_api_association_units_get_association_units(
+            await client.association_units_api.external_api_association_units_get_all_association_units(
                 **kwargs
             )
         )

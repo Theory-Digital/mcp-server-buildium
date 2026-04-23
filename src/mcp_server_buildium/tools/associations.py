@@ -125,7 +125,7 @@ def register_association_tools(mcp: FastMCP, client: BuildiumClient) -> None:
         Returns:
             Dictionary with board members list.
         """
-        result = await client.associations_api.external_api_associations_get_board_members_for_association_by_id(
+        result = await client.board_members_api.external_api_association_board_members_get_all_association_board_members(
             association_id=association_id, limit=limit, offset=offset
         )
         if hasattr(result, "to_dict"):
@@ -148,8 +148,8 @@ def register_association_tools(mcp: FastMCP, client: BuildiumClient) -> None:
         Returns:
             Dictionary with ownership accounts list.
         """
-        result = await client.associations_api.external_api_associations_get_ownership_accounts_for_association_by_id(
-            association_id=association_id, limit=limit, offset=offset
+        result = await client.ownership_accounts_api.external_api_ownership_accounts_get_all_ownership_accounts(
+            associationids=[association_id], limit=limit, offset=offset
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()

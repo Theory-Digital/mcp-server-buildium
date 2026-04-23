@@ -9,8 +9,10 @@ from mcp_server_buildium.buildium_sdk.api import (
     AssociationUnitsApi,
     BankAccountsApi,
     BillsApi,
+    BoardMembersApi,
     FilesApi,
     LeasesApi,
+    OwnershipAccountsApi,
     RentalOwnersApi,
     RentalPropertiesApi,
     RentalTenantsApi,
@@ -39,4 +41,6 @@ __all__ = [
     "BillsApi",
     "FilesApi",
     "BankAccountsApi",
+    "BoardMembersApi",
+    "OwnershipAccountsApi",
 ]

@@ -89,7 +89,7 @@ def register_owner_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     # Association Owners
     @mcp.tool()
     async def list_association_owners(
-        property_id: int | None = None,
+        association_id: int | None = None,
         status: str | None = None,
         limit: int = 100,
         offset: int = 0,
@@ -100,12 +100,12 @@ def register_owner_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             "limit": limit,
             "offset": offset,
         }
-        if property_id is not None:
-            kwargs["propertyid"] = property_id
+        if association_id is not None:
+            kwargs["associationids"] = [association_id]
         if status is not None:
-            kwargs["status"] = status
+            kwargs["statuses"] = [status]
 
-        result = await client.association_owners_api.external_api_association_owners_get_association_owners(
+        result = await client.association_owners_api.external_api_association_owners_get_all_association_owners(
             **kwargs
         )
         if hasattr(result, "to_dict"):

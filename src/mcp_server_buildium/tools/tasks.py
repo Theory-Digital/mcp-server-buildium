@@ -29,11 +29,11 @@ def register_task_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             "offset": offset,
         }
         if task_type is not None:
-            kwargs["tasktype"] = task_type
+            kwargs["type"] = task_type
         if assigned_to_user_id is not None:
-            kwargs["assignedtouserid"] = assigned_to_user_id
+            kwargs["assignedtoid"] = assigned_to_user_id
 
-        result = await client.tasks_api.external_api_tasks_get_tasks(**kwargs)
+        result = await client.tasks_api.external_api_tasks_get_all_tasks(**kwargs)
         if hasattr(result, "to_dict"):
             return result.to_dict()
         return result if isinstance(result, dict) else {"tasks": result, "count": len(result)}

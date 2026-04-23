@@ -18,7 +18,7 @@ def register_vendor_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     @mcp.tool()
     async def list_vendors(limit: int = 100, offset: int = 0) -> dict[str, Any]:
         """List vendors from Buildium."""
-        result = await client.vendors_api.external_api_vendors_get_vendors(
+        result = await client.vendors_api.external_api_vendors_get_all_vendors(
             limit=limit, offset=offset
         )
         if hasattr(result, "to_dict"):
