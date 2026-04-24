@@ -18,7 +18,7 @@ def register_lease_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     @mcp.tool()
     async def list_leases(
         property_id: int | None = None,
-        unit_id: int | None = None,
+        unit_number: str | None = None,
         lease_status: str | None = None,
         limit: int = 100,
         offset: int = 0,
@@ -27,7 +27,7 @@ def register_lease_tools(mcp: FastMCP, client: BuildiumClient) -> None:
 
         Args:
             property_id: Optional property ID to filter by.
-            unit_id: Optional unit ID to filter by.
+            unit_number: Optional unit number to filter by.
             lease_status: Optional lease status filter (e.g., "Active", "Future", "Past").
             limit: Maximum number of results (default: 100).
             offset: Offset for pagination (default: 0).
@@ -41,9 +41,9 @@ def register_lease_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             "offset": offset,
         }
         if property_id is not None:
-            kwargs["propertyid"] = property_id
-        if unit_id is not None:
-            kwargs["unitid"] = unit_id
+            kwargs["propertyids"] = [property_id]
+        if unit_number is not None:
+            kwargs["unitnumber"] = unit_number
         if lease_status is not None:
             kwargs["leasestatuses"] = [lease_status]
 

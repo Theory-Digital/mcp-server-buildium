@@ -52,16 +52,16 @@ def register_unit_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def create_rental_unit(unit_data: dict[str, Any]) -> dict[str, Any]:
         """Create a new rental unit."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.rental_unit_post_message import (
-                RentalUnitPostMessage,
+            from mcp_server_buildium.buildium_sdk.models.rental_units_post_message import (
+                RentalUnitsPostMessage,
             )
 
-            unit_message = RentalUnitPostMessage(**unit_data)
+            unit_message = RentalUnitsPostMessage(**unit_data)
         except ImportError:
             unit_message = unit_data
 
         result = await client.rental_units_api.external_api_rental_units_create_rental_unit(
-            rental_unit_post_message=unit_message
+            rental_units_post_message=unit_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()
@@ -115,16 +115,16 @@ def register_unit_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def create_association_unit(unit_data: dict[str, Any]) -> dict[str, Any]:
         """Create a new association unit."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.association_unit_post_message import (
-                AssociationUnitPostMessage,
+            from mcp_server_buildium.buildium_sdk.models.association_units_post_message import (
+                AssociationUnitsPostMessage,
             )
 
-            unit_message = AssociationUnitPostMessage(**unit_data)
+            unit_message = AssociationUnitsPostMessage(**unit_data)
         except ImportError:
             unit_message = unit_data
 
         result = await client.association_units_api.external_api_association_units_create_association_unit(
-            association_unit_post_message=unit_message
+            association_units_post_message=unit_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()

@@ -29,7 +29,7 @@ def register_owner_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             "offset": offset,
         }
         if property_id is not None:
-            kwargs["propertyid"] = property_id
+            kwargs["propertyids"] = [property_id]
 
         result = await client.rental_owners_api.external_api_rental_owners_get_rental_owners(
             **kwargs
@@ -42,7 +42,7 @@ def register_owner_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def get_rental_owner(owner_id: int) -> dict[str, Any]:
         """Get a specific rental owner by ID."""
         result = await client.rental_owners_api.external_api_rental_owners_get_rental_owner_by_id(
-            owner_id=owner_id
+            rental_owner_id=owner_id
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()
@@ -80,7 +80,7 @@ def register_owner_tools(mcp: FastMCP, client: BuildiumClient) -> None:
             owner_message = owner_data
 
         result = await client.rental_owners_api.external_api_rental_owners_update_rental_owner(
-            owner_id=owner_id, rental_owner_put_message=owner_message
+            rental_owner_id=owner_id, rental_owner_put_message=owner_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()
@@ -126,16 +126,16 @@ def register_owner_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def create_association_owner(owner_data: dict[str, Any]) -> dict[str, Any]:
         """Create a new association owner."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.association_owner_post_message import (
-                AssociationOwnerPostMessage,
+            from mcp_server_buildium.buildium_sdk.models.association_owner_to_existing_ownership_account_post_message import (
+                AssociationOwnerToExistingOwnershipAccountPostMessage,
             )
 
-            owner_message = AssociationOwnerPostMessage(**owner_data)
+            owner_message = AssociationOwnerToExistingOwnershipAccountPostMessage(**owner_data)
         except ImportError:
             owner_message = owner_data
 
         result = await client.association_owners_api.external_api_association_owners_create_association_owner(
-            association_owner_post_message=owner_message
+            association_owner_to_existing_ownership_account_post_message=owner_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()

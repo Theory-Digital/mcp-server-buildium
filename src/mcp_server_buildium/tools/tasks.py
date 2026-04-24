@@ -58,16 +58,16 @@ def register_task_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def create_task_category(category_data: dict[str, Any]) -> dict[str, Any]:
         """Create a new task category."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.task_category_post_message import (
-                TaskCategoryPostMessage,
+            from mcp_server_buildium.buildium_sdk.models.task_category_save_message import (
+                TaskCategorySaveMessage,
             )
 
-            category_message = TaskCategoryPostMessage(**category_data)
+            category_message = TaskCategorySaveMessage(**category_data)
         except ImportError:
             category_message = category_data
 
         result = await client.tasks_api.external_api_task_categories_create_task_category(
-            task_category_post_message=category_message
+            task_category_save_message=category_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()

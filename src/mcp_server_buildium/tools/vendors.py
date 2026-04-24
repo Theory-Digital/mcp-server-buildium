@@ -81,16 +81,16 @@ def register_vendor_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     async def create_vendor_category(category_data: dict[str, Any]) -> dict[str, Any]:
         """Create a new vendor category."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.vendor_category_post_message import (
-                VendorCategoryPostMessage,
+            from mcp_server_buildium.buildium_sdk.models.vendor_category_save_message import (
+                VendorCategorySaveMessage,
             )
 
-            category_message = VendorCategoryPostMessage(**category_data)
+            category_message = VendorCategorySaveMessage(**category_data)
         except ImportError:
             category_message = category_data
 
         result = await client.vendors_api.external_api_vendor_categories_create_vendor_category(
-            vendor_category_post_message=category_message
+            vendor_category_save_message=category_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()
@@ -102,16 +102,16 @@ def register_vendor_tools(mcp: FastMCP, client: BuildiumClient) -> None:
     ) -> dict[str, Any]:
         """Update a vendor category."""
         try:
-            from mcp_server_buildium.buildium_sdk.models.vendor_category_put_message import (
-                VendorCategoryPutMessage,
+            from mcp_server_buildium.buildium_sdk.models.vendor_category_save_message import (
+                VendorCategorySaveMessage,
             )
 
-            category_message = VendorCategoryPutMessage(**category_data)
+            category_message = VendorCategorySaveMessage(**category_data)
         except ImportError:
             category_message = category_data
 
         result = await client.vendors_api.external_api_vendor_categories_update_vendor_category(
-            vendor_category_id=category_id, vendor_category_put_message=category_message
+            vendor_category_id=category_id, vendor_category_save_message=category_message
         )
         if hasattr(result, "to_dict"):
             return result.to_dict()
